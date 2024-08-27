@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        SONARQUBE_ENV = 'My SonarQube' // Replace with your SonarQube configuration name in Jenkins
+        // No need to manually specify SONARQUBE_ENV if configured globally, but you may still want to do so for clarity
     }
 
     stages {
@@ -38,12 +38,13 @@ pipeline {
             steps {
                 script {
                     echo 'Analyzing the code with SonarQube...'
-                    withSonarQubeEnv(SONARQUBE_ENV) {
+                    withSonarQubeEnv('My SonarQube') { // Replace with your SonarQube configuration name in Jenkins
                         sh 'mvn sonar:sonar'
                     }
                 }
             }
         }
+
         stage('Code Analysis') {
             steps {
                 echo 'Analyzing the code...'
