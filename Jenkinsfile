@@ -59,7 +59,7 @@ pipeline {
     
     post {
         always {
-            mail to: 'developer@example.com',
+            mail to: 's224218183@deakin.edu.au',
                  subject: "Jenkins Pipeline - ${currentBuild.fullDisplayName}",
                  body: "Status: ${currentBuild.currentResult}\n\nLogs: ${env.BUILD_URL}console",
                  attachLog: true
