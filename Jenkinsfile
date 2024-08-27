@@ -5,11 +5,6 @@ pipeline {
         maven 'My Maven' // Replace with your Maven installation name in Jenkins
     }
 
-    environment {
-        // Optionally, you can specify SONARQUBE_ENV if necessary
-        // SONARQUBE_ENV = 'My SonarQube' 
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -92,4 +87,5 @@ pipeline {
         }
     }
 }
+
  
