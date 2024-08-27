@@ -39,6 +39,8 @@ pipeline {
             }
         }
 
+        // Removed Deploy to Staging Stage
+        /*
         stage('Deploy to Staging') {
             steps {
                 script {
@@ -51,6 +53,7 @@ pipeline {
                 }
             }
         }
+        */
 
         stage('Integration Tests on Staging') {
             steps {
@@ -62,6 +65,8 @@ pipeline {
             }
         }
 
+        // Removed Deploy to Production Stage
+        /*
         stage('Deploy to Production') {
             steps {
                 script {
@@ -74,6 +79,7 @@ pipeline {
                 }
             }
         }
+        */
     }
 
     post {
@@ -89,5 +95,6 @@ pipeline {
         }
     }
 }
+
 
  
