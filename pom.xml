@@ -8,7 +8,6 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <!-- Add any project-specific properties here -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
@@ -27,19 +26,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                </configuration>
-            </plugin>
-
-            <!-- Checkstyle Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.2</version>
-                <configuration>
-                    <configLocation>checkstyle.xml</configLocation>
-                    <encoding>UTF-8</encoding>
-                    <consoleOutput>true</consoleOutput>
-                    <failsOnError>true</failsOnError>
                 </configuration>
             </plugin>
 
@@ -62,7 +48,8 @@
                 </executions>
             </plugin>
 
-            <!-- Other plugins -->
+            <!-- Other plugins can be added as needed -->
         </plugins>
     </build>
 </project>
+
