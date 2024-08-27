@@ -7,6 +7,13 @@
     <artifactId>task6.1</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+         <properties>
+    <sonar.host.url>http://localhost:9000</sonar.host.url>
+    <!-- Optionally, specify the project key if needed -->
+    <sonar.projectKey>your-project-key</sonar.projectKey> <!-- This line is optional -->
+</properties>
+
+
     <dependencies>
         <!-- Add your dependencies here -->
     </dependencies>
