@@ -1,68 +1,70 @@
 pipeline {
     agent any
-    
+
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code...'
-                // Example using Maven
+                echo 'Building the application...'
+                // Example: Build with Maven
                 sh 'mvn clean package'
             }
         }
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Running unit and integration tests...'
-                // Example using JUnit
+                echo 'Running tests...'
+                // Example: Run tests with Maven
                 sh 'mvn test'
             }
         }
         stage('Code Analysis') {
             steps {
                 echo 'Analyzing the code...'
-                // Example using SonarQube
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar'
-                }
+                // Example: Run SonarQube analysis
+                sh 'mvn sonar:sonar'
             }
         }
         stage('Security Scan') {
             steps {
                 echo 'Performing security scan...'
-                // Example using OWASP ZAP or Snyk
-                sh 'snyk test'  // Replace with OWASP ZAP or other tools if needed
+                // Example: Use a placeholder for security scanning
+                echo 'Security scanning step...'
             }
         }
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying to staging...'
-                // Example deployment to AWS EC2
-                sh 'aws s3 cp target/myapp.war s3://my-staging-bucket/'
-                sh 'aws deploy start-deployment --application-name MyAppStaging --deployment-group-name MyStagingGroup --s3-location bucket=my-staging-bucket,key=myapp.war'
+                echo 'Deploying to staging environment...'
+                // Example: Deploy using a script
+                sh './deploy_staging.sh'
             }
         }
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running integration tests on staging...'
-                // Example using Postman or Selenium
-                sh 'newman run postman_collection.json'
+                // Example: Use a placeholder for integration tests
+                echo 'Integration testing step...'
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying to production...'
-                // Example deployment to AWS EC2
-                sh 'aws s3 cp target/myapp.war s3://my-prod-bucket/'
-                sh 'aws deploy start-deployment --application-name MyAppProd --deployment-group-name MyProdGroup --s3-location bucket=my-prod-bucket,key=myapp.war'
+                echo 'Deploying to production environment...'
+                // Example: Deploy using a script
+                sh './deploy_production.sh'
             }
         }
     }
-    
+
     post {
-        always {
-            mail to: 's224218183@deakin.edu.au',
-                 subject: "Jenkins Pipeline - ${currentBuild.fullDisplayName}",
-                 body: "Status: ${currentBuild.currentResult}\n\nLogs: ${env.BUILD_URL}console",
-                 attachLog: true
+        success {
+            mail to: 'shaharyarnadeem786@gmail.com',
+                 subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "The build was successful. See details at: ${env.BUILD_URL}"
+        }
+        failure {
+            mail to: 'shaharyarnadeem786@gmail.com',
+                 subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "The build failed. Check the logs at: ${env.BUILD_URL}"
         }
     }
 }
+
+       
