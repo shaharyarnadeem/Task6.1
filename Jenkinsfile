@@ -34,7 +34,6 @@ pipeline {
             steps {
                 script {
                     echo 'Performing security scan with OWASP Dependency-Check...'
-                    // Replace with an actual command for OWASP Dependency-Check if needed
                     sh 'mvn org.owasp:dependency-check-maven:check'
                 }
             }
@@ -42,25 +41,37 @@ pipeline {
 
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying to staging environment...'
-                // Example: Deploy using a script
-                sh './deploy_staging.sh'
+                script {
+                    echo 'Deploying to staging environment...'
+                    if (fileExists('deploy_staging.sh')) {
+                        sh './deploy_staging.sh' // Ensure this path is correct
+                    } else {
+                        error 'Deployment script deploy_staging.sh not found!'
+                    }
+                }
             }
         }
 
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Running integration tests on staging...'
-                // Example: Use a placeholder for integration tests
-                echo 'Integration testing step...'
+                script {
+                    echo 'Running integration tests on staging...'
+                    // Add commands for integration tests if applicable
+                    echo 'Integration testing step...'
+                }
             }
         }
 
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying to production environment...'
-                // Example: Deploy using a script
-                sh './deploy_production.sh'
+                script {
+                    echo 'Deploying to production environment...'
+                    if (fileExists('deploy_production.sh')) {
+                        sh './deploy_production.sh' // Ensure this path is correct
+                    } else {
+                        error 'Deployment script deploy_production.sh not found!'
+                    }
+                }
             }
         }
     }
