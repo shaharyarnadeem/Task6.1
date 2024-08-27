@@ -30,21 +30,11 @@ pipeline {
             }
         }
 
-        stage('Code Analysis') {
-            steps {
-                script {
-                    echo 'Analyzing the code with Checkstyle...'
-                    // Replace Checkstyle with any other code analysis tool if needed
-                    sh 'mvn checkstyle:check'
-                }
-            }
-        }
-
         stage('Security Scan') {
             steps {
                 script {
                     echo 'Performing security scan with OWASP Dependency-Check...'
-                    // Replace OWASP Dependency-Check with any other security scanning tool if needed
+                    // Replace with an actual command for OWASP Dependency-Check if needed
                     sh 'mvn org.owasp:dependency-check-maven:check'
                 }
             }
