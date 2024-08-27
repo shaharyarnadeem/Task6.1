@@ -6,7 +6,8 @@ pipeline {
     }
 
     environment {
-        // No need to manually specify SONARQUBE_ENV if configured globally, but you may still want to do so for clarity
+        // Optionally, you can specify SONARQUBE_ENV if necessary
+        // SONARQUBE_ENV = 'My SonarQube' 
     }
 
     stages {
@@ -45,13 +46,6 @@ pipeline {
             }
         }
 
-        stage('Code Analysis') {
-            steps {
-                echo 'Analyzing the code...'
-                // Example: Run SonarQube analysis
-                sh 'mvn sonar:sonar'
-            }
-        }
         stage('Security Scan') {
             steps {
                 echo 'Performing security scan...'
@@ -59,6 +53,7 @@ pipeline {
                 echo 'Security scanning step...'
             }
         }
+
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying to staging environment...'
@@ -66,6 +61,7 @@ pipeline {
                 sh './deploy_staging.sh'
             }
         }
+
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running integration tests on staging...'
@@ -73,6 +69,7 @@ pipeline {
                 echo 'Integration testing step...'
             }
         }
+
         stage('Deploy to Production') {
             steps {
                 echo 'Deploying to production environment...'
@@ -95,5 +92,4 @@ pipeline {
         }
     }
 }
-
-       
+ 
