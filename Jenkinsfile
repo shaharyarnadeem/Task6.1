@@ -1,28 +1,47 @@
 pipeline {
     agent any
+
     tools {
-        maven "My Maven"
+        maven 'My Maven' // Replace with your Maven installation name in Jenkins
+    }
+
+    environment {
+        SONARQUBE_ENV = 'My SonarQube' // Replace with your SonarQube configuration name in Jenkins
     }
 
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                echo 'Building the application...'
-                // Example: Build with Maven
-                sh 'mvn clean package'
+                checkout scm
             }
         }
-        stage('SonarQube analysis') {
+
+        stage('Build') {
             steps {
-                withSonarQubeEnv('My SonarQube') { // Name of your SonarQube configuration in Jenkins
-                    sh 'mvn sonar:sonar'
+                script {
+                    echo 'Building the application...'
+                    sh 'mvn clean package'
                 }
             }
-        stage('Unit and Integration Tests') {
+        }
+
+        stage('Run Unit Tests') {
             steps {
-                echo 'Running tests...'
-                // Example: Run tests with Maven
-                sh 'mvn test'
+                script {
+                    echo 'Running unit tests...'
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    echo 'Analyzing the code with SonarQube...'
+                    withSonarQubeEnv(SONARQUBE_ENV) {
+                        sh 'mvn sonar:sonar'
+                    }
+                }
             }
         }
         stage('Code Analysis') {
