@@ -30,22 +30,23 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+        stage('Code Analysis') {
             steps {
                 script {
-                    echo 'Analyzing the code with SonarQube...'
-                    withSonarQubeEnv('My SonarQube') { // Replace with your SonarQube configuration name in Jenkins
-                        sh 'mvn sonar:sonar'
-                    }
+                    echo 'Analyzing the code with Checkstyle...'
+                    // Replace Checkstyle with any other code analysis tool if needed
+                    sh 'mvn checkstyle:check'
                 }
             }
         }
 
         stage('Security Scan') {
             steps {
-                echo 'Performing security scan...'
-                // Example: Use a placeholder for security scanning
-                echo 'Security scanning step...'
+                script {
+                    echo 'Performing security scan with OWASP Dependency-Check...'
+                    // Replace OWASP Dependency-Check with any other security scanning tool if needed
+                    sh 'mvn org.owasp:dependency-check-maven:check'
+                }
             }
         }
 
