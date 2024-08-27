@@ -12,6 +12,12 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('My SonarQube') { // Name of your SonarQube configuration in Jenkins
+                    sh 'mvn sonar:sonar'
+                }
+            }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running tests...'
