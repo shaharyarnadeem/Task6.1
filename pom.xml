@@ -20,7 +20,16 @@
 
     <build>
         <plugins>
-            <!-- Add build plugins here -->
-        </plugins>
+        <!-- Other plugins -->
+
+        <!-- SonarQube Plugin -->
+        <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>4.0.0.4121</version>
+        </plugin>
+
+        <!-- Other plugins -->
+    </plugins>
     </build>
 </project>
