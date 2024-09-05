@@ -57,19 +57,15 @@ pipeline {
             mail to: 'shaharyarnadeem786@gmail.com',
                  subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                  body: "The build was successful. See details at: ${env.BUILD_URL}"
-            emailext to: 'shaharyarnadeem786@gmail.com',
-                     subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                     body: "The build was successful. See details at: ${env.BUILD_URL}",
-                     attachLog: true // Attach the build log to the email
+            emailext attachLog: true, body: '', subject: '', to: 'shaharyarnadeem786@gmail.com '
+                    
         }
         failure {
             mail to: 'shaharyarnadeem786@gmail.com',
                  subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                  body: "The build failed. Check the logs at: ${env.BUILD_URL}"
-            emailext to: 'shaharyarnadeem786@gmail.com',
-                     subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                     body: "The build failed. Check the logs at: ${env.BUILD_URL}",
-                     attachLog: true // Attach the build log to the email
+            emailext attachLog: true, body: '', subject: '', to: 'shaharyarnadeem786@gmail.com '
+                    
             }
         }
     }
