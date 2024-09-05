@@ -39,22 +39,6 @@ pipeline {
             }
         }
 
-        // Removed Deploy to Staging Stage
-        /*
-        stage('Deploy to Staging') {
-            steps {
-                script {
-                    echo 'Deploying to staging environment...'
-                    if (fileExists('deploy_staging.sh')) {
-                        sh './deploy_staging.sh' // Ensure this path is correct
-                    } else {
-                        error 'Deployment script deploy_staging.sh not found!'
-                    }
-                }
-            }
-        }
-        */
-
         stage('Integration Tests on Staging') {
             steps {
                 script {
@@ -64,37 +48,30 @@ pipeline {
                 }
             }
         }
-
-        // Removed Deploy to Production Stage
-        /*
-        stage('Deploy to Production') {
-            steps {
-                script {
-                    echo 'Deploying to production environment...'
-                    if (fileExists('deploy_production.sh')) {
-                        sh './deploy_production.sh' // Ensure this path is correct
-                    } else {
-                        error 'Deployment script deploy_production.sh not found!'
-                    }
-                }
-            }
-        }
-        */
     }
 
     post {
         success {
-            mail to: 'shaharyarnadeem786@gmail.com',
-                 subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "The build was successful. See details at: ${env.BUILD_URL}"
+            script {
+                def logFile = 'build.log'
+                sh "echo 'Build completed successfully' > ${logFile}" // Generate a log file for the successful build
+                archiveArtifacts artifacts: "${logFile}", allowEmptyArchive: true // Archive the log file
+                mail to: 'shaharyarnadeem786@gmail.com',
+                     subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                     body: "The build was successful. See details at: ${env.BUILD_URL}",
+                     attachLog: true // Attach the console output
+            }
         }
         failure {
-            mail to: 'shaharyarnadeem786@gmail.com',
-                 subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "The build failed. Check the logs at: ${env.BUILD_URL}"
+            script {
+                def logFile = 'build.log'
+                sh "echo 'Build failed' > ${logFile}" // Generate a log file for the failed build
+                archiveArtifacts artifacts: "${logFile}", allowEmptyArchive: true // Archive the log file
+                mail to: 'shaharyarnadeem786@gmail.com',
+                     subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                     body: "The build failed. Check the logs at: ${env.BUILD_URL}",
+                     attachLog: true // Attach the console output
+            }
         }
     }
 }
-
-
- 
