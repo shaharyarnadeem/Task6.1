@@ -34,7 +34,8 @@ pipeline {
             steps {
                 script {
                     echo 'Performing security scan with OWASP Dependency-Check...'
-                    sh 'mvn org.owasp:dependency-check-maven:check'
+                    // Ensure you have the latest or stable version of the plugin in your pom.xml
+                    sh 'mvn org.owasp:dependency-check-maven:check -Ddata.directory=dependency-check-data'
                 }
             }
         }
@@ -58,8 +59,7 @@ pipeline {
                 archiveArtifacts artifacts: "${logFile}", allowEmptyArchive: true // Archive the log file
                 mail to: 'shaharyarnadeem786@gmail.com',
                      subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                     body: "The build was successful. See details at: ${env.BUILD_URL}",
-                     attachLog: true // Attach the console output
+                     body: "The build was successful. See details at: ${env.BUILD_URL}"
             }
         }
         failure {
@@ -69,8 +69,7 @@ pipeline {
                 archiveArtifacts artifacts: "${logFile}", allowEmptyArchive: true // Archive the log file
                 mail to: 'shaharyarnadeem786@gmail.com',
                      subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                     body: "The build failed. Check the logs at: ${env.BUILD_URL}",
-                     attachLog: true // Attach the console output
+                     body: "The build failed. Check the logs at: ${env.BUILD_URL}"
             }
         }
     }
