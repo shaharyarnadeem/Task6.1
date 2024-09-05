@@ -58,10 +58,9 @@ pipeline {
                 def logFile = 'build.log'
                 sh "echo 'Build completed successfully' > ${logFile}" // Generate a log file for the successful build
                 archiveArtifacts artifacts: "${logFile}", allowEmptyArchive: true // Archive the log file
-                emailext to: 'shaharyarnadeem786@gmail.com',
-                         subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                         body: "The build was successful. See details at: ${env.BUILD_URL}",
-                         attachLog: true // Attach the build log to the email
+                mail to: 'shaharyarnadeem786@gmail.com',
+                     subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                     body: "The build was successful. See details at: ${env.BUILD_URL}"
             }
         }
         failure {
@@ -69,11 +68,10 @@ pipeline {
                 def logFile = 'build.log'
                 sh "echo 'Build failed' > ${logFile}" // Generate a log file for the failed build
                 archiveArtifacts artifacts: "${logFile}", allowEmptyArchive: true // Archive the log file
-                emailext to: 'shaharyarnadeem786@gmail.com',
-                         subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                         body: "The build failed. Check the logs at: ${env.BUILD_URL}",
-                         attachLog: true // Attach the build log to the email
+                mail to: 'shaharyarnadeem786@gmail.com',
+                     subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                     body: "The build failed. Check the logs at: ${env.BUILD_URL}"
             }
         }
     }
-}
+} 
