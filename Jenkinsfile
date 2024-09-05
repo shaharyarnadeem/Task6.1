@@ -48,7 +48,7 @@ pipeline {
                 script {
                     echo 'Running integration tests on staging...'
                     // Redirect both stdout and stderr to the build.log file
-                    echo 'Integration testing step...' >> build.log 2>&1
+                    echo 'Integration testing step...' >> build.log 
                 }
             }
         }
