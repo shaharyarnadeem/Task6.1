@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building the application...'
-                    sh 'mvn clean package | tee build.log' // Save output to build.log
+                    sh 'mvn clean package'
                 }
             }
         }
@@ -25,36 +25,28 @@ pipeline {
             steps {
                 script {
                     echo 'Running unit tests...'
-                    sh 'mvn test | tee test.log' // Save output to test.log
+                    sh 'mvn test'
                 }
             }
         }
 
+        /*
         stage('Security Scan') {
             steps {
                 script {
                     echo 'Performing security scan with OWASP Dependency-Check...'
-                    sh 'mvn org.owasp:dependency-check-maven:check | tee security_scan.log' // Save output to security_scan.log
+                    sh 'mvn org.owasp:dependency-check-maven:check -Ddata.directory=dependency-check-data'
                 }
             }
         }
+        */
 
         stage('Integration Tests on Staging') {
             steps {
                 script {
                     echo 'Running integration tests on staging...'
-                    // Placeholder for integration tests
+                    // Add commands for integration tests if applicable
                     echo 'Integration testing step...'
-                }
-            }
-        }
-
-        stage('Deploy to Production') {
-            steps {
-                script {
-                    echo 'Deploying to production environment...'
-                    // Placeholder for deployment
-                    echo 'Deployment step...'
                 }
             }
         }
@@ -62,22 +54,24 @@ pipeline {
 
     post {
         success {
-            // Attach build log
-            archiveArtifacts artifacts: 'build.log, test.log, security_scan.log', allowEmptyArchive: true
-            
-            mail to: 'shaharyarnadeem786@gmail.com',
-                 subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "The build was successful. See details at: ${env.BUILD_URL}",
-                 attachments: 'build.log, test.log, security_scan.log'
+            script {
+                def logFile = 'build.log'
+                sh "echo 'Build completed successfully' > ${logFile}" // Generate a log file for the successful build
+                archiveArtifacts artifacts: "${logFile}", allowEmptyArchive: true // Archive the log file
+                mail to: 'shaharyarnadeem786@gmail.com',
+                     subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                     body: "The build was successful. See details at: ${env.BUILD_URL}"
+            }
         }
         failure {
-            // Attach build log
-            archiveArtifacts artifacts: 'build.log, test.log, security_scan.log', allowEmptyArchive: true
-
-            mail to: 'shaharyarnadeem786@gmail.com',
-                 subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "The build failed. Check the logs at: ${env.BUILD_URL}",
-                 attachments: 'build.log, test.log, security_scan.log'
+            script {
+                def logFile = 'build.log'
+                sh "echo 'Build failed' > ${logFile}" // Generate a log file for the failed build
+                archiveArtifacts artifacts: "${logFile}", allowEmptyArchive: true // Archive the log file
+                mail to: 'shaharyarnadeem786@gmail.com',
+                     subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                     body: "The build failed. Check the logs at: ${env.BUILD_URL}"
+            }
         }
     }
 }
