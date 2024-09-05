@@ -1,4 +1,4 @@
-pipeline {
+\pipeline {
     agent any
 
     tools {
@@ -62,22 +62,24 @@ pipeline {
 
     post {
         success {
-            // Attach build log
-            archiveArtifacts artifacts: 'build.log, test.log, security_scan.log', allowEmptyArchive: true
-            
+            // Read logs into variables
+            def buildLog = readFile('build.log')
+            def testLog = readFile('test.log')
+            def securityLog = readFile('security_scan.log')
+
             mail to: 'shaharyarnadeem786@gmail.com',
                  subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "The build was successful. See details at: ${env.BUILD_URL}",
-                 attachments: 'build.log, test.log, security_scan.log'
+                 body: "The build was successful. See details at: ${env.BUILD_URL}\n\nBuild Log:\n${buildLog}\n\nTest Log:\n${testLog}\n\nSecurity Scan Log:\n${securityLog}"
         }
         failure {
-            // Attach build log
-            archiveArtifacts artifacts: 'build.log, test.log, security_scan.log', allowEmptyArchive: true
+            // Read logs into variables
+            def buildLog = readFile('build.log')
+            def testLog = readFile('test.log')
+            def securityLog = readFile('security_scan.log')
 
             mail to: 'shaharyarnadeem786@gmail.com',
                  subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "The build failed. Check the logs at: ${env.BUILD_URL}",
-                 attachments: 'build.log, test.log, security_scan.log'
+                 body: "The build failed. Check the logs at: ${env.BUILD_URL}\n\nBuild Log:\n${buildLog}\n\nTest Log:\n${testLog}\n\nSecurity Scan Log:\n${securityLog}"
         }
     }
 }
