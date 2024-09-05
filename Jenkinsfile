@@ -1,4 +1,4 @@
-\pipeline {
+pipeline {
     agent any
 
     tools {
@@ -16,7 +16,7 @@
             steps {
                 script {
                     echo 'Building the application...'
-                    sh 'mvn clean package | tee build.log' // Save output to build.log
+                    sh 'mvn clean package'
                 }
             }
         }
@@ -25,7 +25,7 @@
             steps {
                 script {
                     echo 'Running unit tests...'
-                    sh 'mvn test | tee test.log' // Save output to test.log
+                    sh 'mvn test'
                 }
             }
         }
@@ -34,7 +34,7 @@
             steps {
                 script {
                     echo 'Performing security scan with OWASP Dependency-Check...'
-                    sh 'mvn org.owasp:dependency-check-maven:check | tee security_scan.log' // Save output to security_scan.log
+                    sh 'mvn org.owasp:dependency-check-maven:check'
                 }
             }
         }
@@ -62,24 +62,14 @@
 
     post {
         success {
-            // Read logs into variables
-            def buildLog = readFile('build.log')
-            def testLog = readFile('test.log')
-            def securityLog = readFile('security_scan.log')
-
             mail to: 'shaharyarnadeem786@gmail.com',
                  subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "The build was successful. See details at: ${env.BUILD_URL}\n\nBuild Log:\n${buildLog}\n\nTest Log:\n${testLog}\n\nSecurity Scan Log:\n${securityLog}"
+                 body: "The build was successful. See details at: ${env.BUILD_URL}"
         }
         failure {
-            // Read logs into variables
-            def buildLog = readFile('build.log')
-            def testLog = readFile('test.log')
-            def securityLog = readFile('security_scan.log')
-
             mail to: 'shaharyarnadeem786@gmail.com',
                  subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "The build failed. Check the logs at: ${env.BUILD_URL}\n\nBuild Log:\n${buildLog}\n\nTest Log:\n${testLog}\n\nSecurity Scan Log:\n${securityLog}"
+                 body: "The build failed. Check the logs at: ${env.BUILD_URL}"
         }
     }
 }
