@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building the application...'
-                    sh 'mvn clean package'
+                    sh 'mvn clean package > build.log 2>&1' // Redirect output to build.log
                 }
             }
         }
@@ -25,28 +25,34 @@ pipeline {
             steps {
                 script {
                     echo 'Running unit tests...'
-                    sh 'mvn test'
+                    sh 'mvn test >> build.log 2>&1' // Append output to build.log
                 }
             }
         }
 
-        /*
         stage('Security Scan') {
             steps {
                 script {
                     echo 'Performing security scan with OWASP Dependency-Check...'
-                    sh 'mvn org.owasp:dependency-check-maven:check -Ddata.directory=dependency-check-data'
+                    sh 'mvn org.owasp:dependency-check-maven:check >> build.log 2>&1' // Append output to build.log
                 }
             }
         }
-        */
 
         stage('Integration Tests on Staging') {
             steps {
                 script {
                     echo 'Running integration tests on staging...'
-                    // Add commands for integration tests if applicable
-                    echo 'Integration testing step...'
+                    echo 'Integration testing step...' >> build.log 2>&1 // Append output to build.log
+                }
+            }
+        }
+
+        stage('Deploy to Production') {
+            steps {
+                script {
+                    echo 'Deploying to production environment...'
+                    echo 'Production deployment step...' >> build.log 2>&1 // Append output to build.log
                 }
             }
         }
@@ -69,6 +75,4 @@ pipeline {
                  attachments: 'build.log' // Attach the log file
         }
     }
-}
-
 }
